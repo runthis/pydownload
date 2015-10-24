@@ -2,9 +2,7 @@
 
 Using Python, download all files from several FTP sources
 
-#PEP8 Compliant
-
-
+--PEP8 Compliant--
 
 Example Usage:
 
