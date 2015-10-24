@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 import os
-from ftplib import FTP # ftputil is good for this, but ftplib comes with the py install
+from ftplib import FTP  # ftplib comes with the py install
+
 
 class Ftp:
 
-    def __init__(self, hostname, username, password, port = 21):
+    def __init__(self, hostname, username, password, port=21):
 
         print '\nConnecting to %s on port %d' % (hostname, port)
 
@@ -15,22 +15,22 @@ class Ftp:
         try:
             ftp.connect(hostname, port)
         except:
-            raise Exception('\n\nThe hostname %s:%d could not be found/connected to\n' % (hostname, port))
+            raise Exception('\n\nConnection failed: %s:%d' % (hostname, port))
 
         try:
             ftp.login(user=username, passwd=password)
             self.start = ftp.pwd()
-            
+
             print 'Login Successful: %s\n' % username
-        except: #ftplib.error_perm
-            raise Exception('\n\nUnable to login using the credentials provided: \nHost: %s\nUser: %s\nPass: %s\n\n' % (hostname, username, password))
+        except:  # ftplib.error_perm
+            raise Exception('\n\nAuth: \n%s@%d\n\n' % (hostname, username))
 
         self.ftp = ftp
         self.hostname = hostname
 
     def end(self):
         try:
-          self.ftp.quit()
+            self.ftp.quit()
         except:
             pass
         print '\n\nConnection to %s has been closed\n' % self.hostname
@@ -39,7 +39,8 @@ class Ftp:
         return self.ftp.nlst()
 
     def get(self, file):
-        return self.ftp.retrbinary('RETR ' + file, open('%s/%s' % (self.hostname, file), 'wb').write)
+        return self.ftp.retrbinary(
+            'RETR ' + file, open('%s/%s' % (self.hostname, file), 'wb').write)
 
     def cwd(self, file):
         return self.ftp.cwd(file)
